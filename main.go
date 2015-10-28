@@ -18,7 +18,7 @@ func main() {
 	flag.Parse()
 	for {
 		if err := lineScan(); err != nil {
-			log.Print(err)
+			log.Fatal(err)
 		}
 		time.Sleep(*duration)
 	}
