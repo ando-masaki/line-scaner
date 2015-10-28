@@ -15,9 +15,15 @@ var (
 )
 
 func main() {
+	flag.Parse()
+	for {
+		lineScan()
+	}
+}
+
+func lineScan() {
 	var fp *os.File
 	var err error
-	flag.Parse()
 	if *file == "" {
 		fp = os.Stdin
 	} else {
