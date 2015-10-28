@@ -17,11 +17,14 @@ var (
 func main() {
 	flag.Parse()
 	for {
-		lineScan()
+		if err := lineScan(); err != nil {
+			log.Print(err)
+		}
+		time.Sleep(*duration)
 	}
 }
 
-func lineScan() {
+func lineScan() error {
 	var fp *os.File
 	var err error
 	if *file == "" {
@@ -29,7 +32,7 @@ func lineScan() {
 	} else {
 		fp, err = os.Open(*file)
 		if err != nil {
-			log.Fatalf("main os.Open err: %s", err)
+			return fmt.Errorf("lineScan os.Open err: %s", err)
 		}
 	}
 	defer fp.Close()
@@ -39,6 +42,7 @@ func lineScan() {
 		time.Sleep(*duration)
 	}
 	if err := scanner.Err(); err != nil {
-		log.Fatalf("main scanner.Err err: %s", err)
+		return fmt.Errorf("lineScan scanner.Err err: %s", err)
 	}
+	return nil
 }
