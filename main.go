@@ -39,14 +39,17 @@ func lineScan() error {
 	defer fp.Close()
 	reader := bufio.NewReaderSize(fp, 1024)
 	for {
-		line, _, err := reader.ReadLine()
-		fmt.Println(string(line))
+		line, isPrefix, err := reader.ReadLine()
+		os.Stdout.Write(line)
 		if err == io.EOF {
 			break
 		} else if err != nil {
 			return err
 		}
-		time.Sleep(*duration)
+		if !isPrefix {
+			fmt.Println("")
+			time.Sleep(*duration)
+		}
 	}
 	return nil
 }
