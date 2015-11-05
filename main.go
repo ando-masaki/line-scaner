@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"time"
@@ -36,13 +37,16 @@ func lineScan() error {
 		}
 	}
 	defer fp.Close()
-	scanner := bufio.NewScanner(fp)
-	for scanner.Scan() {
-		fmt.Println(scanner.Text())
+	reader := bufio.NewReaderSize(fp, 1024)
+	for {
+		line, _, err := reader.ReadLine()
+		fmt.Println(string(line))
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return err
+		}
 		time.Sleep(*duration)
-	}
-	if err := scanner.Err(); err != nil {
-		return fmt.Errorf("lineScan scanner.Err err: %s", err)
 	}
 	return nil
 }
